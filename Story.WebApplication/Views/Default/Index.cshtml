@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "上傳你的故事";
 }
 
 @section styles{
@@ -38,11 +38,23 @@
 }
 @section scripts{
     <script>
+
+        // online virus scan solution
+        // https://developers.virustotal.com/v3.0/reference#overview
+
+        // online media file transfer solution
+        // yet
+
+        // the last two is mac format
+        var imageExtensions = ['.jpg', '.jpeg', '.tiff', '.tif', '.gif', '.bmp', '.png', '.webp', '.heif', 'heic'];
+        var videoExtensions = ['.avchd', '.avi', '.flv', '.mkv', '.mov', '.mp4', '.webm', '.wmv'];
+        var audioExtensions = ['.m4a', '.flac', '.mp3', '.wav', '.wma'];
+
         $(document).ready(function () {
-            // kendo upload 
+            // kendo upload
             var upload = $("#file").kendoUpload({
                 validation: {
-                    allowedExtensions: ['.jpg']
+                    allowedExtensions: imageExtensions
                 },
                 localization: {
                     select: "選擇檔案"
@@ -53,14 +65,14 @@
             // set upload file validations
             $('.nav-pills > li').click(function (e) {
                 switch (e.target.parentElement.id) {
-                    case 'pitcturePill':
-                        upload.options.validation.allowedExtensions = ['.jpg'];
+                    case 'imagePill':
+                        upload.options.validation.allowedExtensions = imageExtensions;
                         break;
                     case 'videoPill':
-                        upload.options.validation.allowedExtensions = ['.mp4'];
+                        upload.options.validation.allowedExtensions = videoExtensions;
                         break;
                     case 'audioPill':
-                        upload.options.validation.allowedExtensions = ['.mp3'];
+                        upload.options.validation.allowedExtensions = audioExtensions;
                         break;
                     default:
                         break;
@@ -74,7 +86,7 @@
 <div class="row">
     <div class="col-xs-offset-2 col-xs-8">
         <ul class="nav nav-pills nav-justified">
-            <li id="pitcturePill" class="active"><a data-toggle="pill" href="#pictureTab">PICTURE</a></li>
+            <li id="imagePill" class="active"><a data-toggle="pill" href="#imageTab">IMAGE</a></li>
             <li id="videoPill"><a data-toggle="pill" href="#videoTab">VIDEO</a></li>
             <li id="audioPill"><a data-toggle="pill" href="#audioTab">AUDIO</a></li>
         </ul>
@@ -82,7 +94,7 @@
 </div>
 <div>
     <div class="col-xs-offset-2 col-xs-8 form-group">
-        <form method="post" action="Index">
+        <form method="post" action="Default/Save">
             <div id="upload" class="row">
                 <div class="col-xs-offset-2 col-xs-8">
                     <input name="file" id="file" type="file" aria-label="files" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -12,6 +13,22 @@ namespace Story.WebApplication.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+
+        [HttpPost]
+        //public ActionResult Save(HttpPostedFileBase file)
+        public ActionResult Save()
+        {
+            if (Request.Files["Attachment"] is HttpPostedFileBase file)
+            {
+                var fileName = Path.GetFileName(file.FileName);
+                var physicalPath = Path.Combine(Server.MapPath("~/App_Data"), fileName);
+
+                file.SaveAs(physicalPath);
+            }
+
+            return Content(string.Empty);
         }
 
         // GET: Default/Details/5
