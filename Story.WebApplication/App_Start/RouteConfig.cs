@@ -16,13 +16,13 @@ namespace Story.WebApplication
             routes.MapRoute(
                 name: "Show",
                 url: "{id}",
-                defaults: new { controller = "Home", action = "Show" }
+                defaults: new { controller = "Default", action = "Show" }
             );
 
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Default", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

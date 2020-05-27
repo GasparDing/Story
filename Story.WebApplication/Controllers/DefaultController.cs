@@ -85,5 +85,12 @@ namespace Story.WebApplication.Controllers
                 return View();
             }
         }
+
+        public ActionResult Show(string id)
+        {
+            ViewBag.Message = "Your contact page.";
+
+            return View();
+        }
     }
 }

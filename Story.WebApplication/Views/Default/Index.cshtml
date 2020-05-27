@@ -8,66 +8,93 @@
         h2 {
             text-align: center;
             padding-bottom: 20px;
+            font-family: 'Comic Sans MS';
+            font-weight: 600;
         }
 
         .body-content {
             padding-top: 50px;
             padding-bottom: 50px;
         }
+
+        #submit, #upload {
+            margin-top: 3em;
+        }
+
+            #submit > div > p {
+                text-align: center;
+            }
+
+        .nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover {
+            background-color: #729800;
+            color: white;
+        }
+
+        .nav-pills li a {
+            background-color: white;
+            color: #729800;
+        }
     </style>
 }
 @section scripts{
     <script>
         $(document).ready(function () {
-
-            $("#picture").kendoUpload({
-                async: {
-                    saveUrl: "save",
-                    removeUrl: "remove"
-                },
+            // kendo upload 
+            var upload = $("#file").kendoUpload({
                 validation: {
-                    allowedExtensions: [".pdf"]
+                    allowedExtensions: ['.jpg']
+                },
+                localization: {
+                    select: "選擇檔案"
+                },
+                multiple: false
+            }).data('kendoUpload');
+
+            // set upload file validations
+            $('.nav-pills > li').click(function (e) {
+                switch (e.target.parentElement.id) {
+                    case 'pitcturePill':
+                        upload.options.validation.allowedExtensions = ['.jpg'];
+                        break;
+                    case 'videoPill':
+                        upload.options.validation.allowedExtensions = ['.mp4'];
+                        break;
+                    case 'audioPill':
+                        upload.options.validation.allowedExtensions = ['.mp3'];
+                        break;
+                    default:
+                        break;
                 }
             });
         });
     </script>
 }
 
-
-<h2>UPLOAD YOUR STORY</h2>
+<h2>Do you have a story ?</h2>
 <div class="row">
     <div class="col-xs-offset-2 col-xs-8">
         <ul class="nav nav-pills nav-justified">
-            <li class="active"><a data-toggle="pill" href="#pictureTab">PICTURE</a></li>
-            <li><a data-toggle="pill" href="#videoTab">VIDEO</a></li>
-            <li><a data-toggle="pill" href="#audioTab">AUDIO</a></li>
+            <li id="pitcturePill" class="active"><a data-toggle="pill" href="#pictureTab">PICTURE</a></li>
+            <li id="videoPill"><a data-toggle="pill" href="#videoTab">VIDEO</a></li>
+            <li id="audioPill"><a data-toggle="pill" href="#audioTab">AUDIO</a></li>
         </ul>
     </div>
 </div>
-
-<div class="row">
-    <div class="tab-content col-xs-offset-2 col-xs-8">
-        <div id="pictureTab" class="tab-pane fade in active">
-            <form class="form-horizontal">
-                <div class="form-group form-inline">
-                    <label class="control-label col-xs-offset-2 col-xs-2" for="picture">請選擇圖片檔案</label>
-                    <div class="col-sm-6">
-                        <div id="picture" />
-                        @*<input type="file" class="form-control" id="picture" name="picture"/>*@
-                    </div>
-                    @*<div class="col-xs-8">
-
-                        </div>*@
+<div>
+    <div class="col-xs-offset-2 col-xs-8 form-group">
+        <form method="post" action="Index">
+            <div id="upload" class="row">
+                <div class="col-xs-offset-2 col-xs-8">
+                    <input name="file" id="file" type="file" aria-label="files" />
                 </div>
-            </form>
-        </div>
-        <div id="videoTab" class="tab-pane fade">
-            <h3>Menu 1</h3>
-            <p>Some content in menu 1.</p>
-        </div>
-        <div id="audioTab" class="tab-pane fade">
-            <h3>Menu 2</h3>
-            <p>Some content in menu 2.</p>
-        </div>
+            </div>
+            <div id="submit" class="row">
+                <div class="col-xs-12">
+                    <p>
+                        <button type="submit" class="k-button">送出 </button>
+                    </p>
+                </div>
+            </div>
+        </form>
     </div>
 </div>

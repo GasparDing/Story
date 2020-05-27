@@ -9,9 +9,10 @@
     @RenderSection("styles", required: false)
     @Scripts.Render("~/bundles/modernizr")
 
-    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2020.1.219/styles/kendo.common.min.css" />
-    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2020.1.219/styles/kendo.default.min.css" />
-    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2020.1.219/styles/kendo.default.mobile.min.css" />
+    <link href="@Url.Content("~/Content/kendo/2020.1.219/kendo.common-material.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/kendo/2020.1.219/kendo.metro.min.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/kendo/2020.1.219/kendo.metro.mobile.min.css")" rel="stylesheet" />
+
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -22,13 +23,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("應用程式名稱", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Story", "Index", "Default", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("首頁", "Index", "Home")</li>
-                    <li>@Html.ActionLink("關於", "About", "Home")</li>
-                    <li>@Html.ActionLink("連絡人", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("上傳", "Index", "Default")</li>
+                    @*<li>@Html.ActionLink("關於", "About", "Home")</li>
+                    <li>@Html.ActionLink("連絡人", "Contact", "Home")</li>*@
                 </ul>
             </div>
         </div>
@@ -39,7 +40,7 @@
     <div class="container">
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - 我的 ASP.NET 應用程式</p>
+            <p>Copyright &copy; @(DateTime.Now.Year) GasparDing. All Rights Reserved</p>
         </footer>
     </div>
 
@@ -49,5 +50,7 @@
 
     <script src="https://kendo.cdn.telerik.com/2020.1.219/js/kendo.all.min.js"></script>
     @*https://developer.mozilla.org/zh-TW/docs/Web/HTML/Element*@
+    <script src="https://kendo.cdn.telerik.com/2020.1.219/js/cultures/kendo.culture.zh-TW.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2020.1.219/js/messages/kendo.messages.zh-TW.min.js"></script>
 </body>
 </html>
