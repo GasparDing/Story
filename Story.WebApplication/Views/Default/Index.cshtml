@@ -17,13 +17,9 @@
             padding-bottom: 50px;
         }
 
-        #submit, #upload {
-            margin-top: 3em;
+        #upload, .dropZone {
+            margin-top: 2em;
         }
-
-            #submit > div > p {
-                text-align: center;
-            }
 
         .nav-pills > li.active > a, .nav-pills > li.active > a:focus, .nav-pills > li.active > a:hover {
             background-color: #729800;
@@ -33,6 +29,30 @@
         .nav-pills li a {
             background-color: white;
             color: #729800;
+        }
+
+        .fadedd {
+            display: none;
+        }
+
+        .dropZone {
+            position: relative;
+            display: inline-block;
+            background-color: #f8f8f8;
+            border: 1px solid #c7c7c7;
+            height: 150px;
+            text-align: center;
+        }
+
+        .textWrapper {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            font-size: 18px;
+            line-height: 1.2em;
+            font-family: Arial,Helvetica,sans-serif;
+            color: #ccc;
         }
     </style>
 }
@@ -52,38 +72,51 @@
 
         $(document).ready(function () {
             // kendo upload
-            var upload = $("#file").kendoUpload({
+            var upload = $("#files").kendoUpload({
+                async: {
+                    chunkSize: 1,   // bytes
+                    saveUrl: "/Default/ChunkSave",
+                    autoUpload: false
+                },
                 validation: {
                     allowedExtensions: imageExtensions
                 },
                 localization: {
                     select: "選擇檔案"
                 },
-                multiple: false
+                multiple: false,
+                dropZone: ".dropZone"
             }).data('kendoUpload');
 
             // set upload file validations
             $('.nav-pills > li').click(function (e) {
-                switch (e.target.parentElement.id) {
-                    case 'imagePill':
-                        upload.options.validation.allowedExtensions = imageExtensions;
-                        break;
-                    case 'videoPill':
-                        upload.options.validation.allowedExtensions = videoExtensions;
-                        break;
-                    case 'audioPill':
-                        upload.options.validation.allowedExtensions = audioExtensions;
-                        break;
-                    default:
-                        break;
+                var active = document.querySelector('.active');
+                if (active && active.id != e.target.parentElement.id) {
+                    switch (e.target.parentElement.id) {
+                        case 'imagePill':
+                            upload.options.validation.allowedExtensions = imageExtensions;
+                            break;
+                        case 'videoPill':
+                            upload.options.validation.allowedExtensions = videoExtensions;
+                            break;
+                        case 'audioPill':
+                            upload.options.validation.allowedExtensions = audioExtensions;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    upload.clearFile(function () { return true; });
                 }
             });
+
+            $(".fadedd").fadeIn('fast');
         });
     </script>
 }
 
 <h2>Do you have a story ?</h2>
-<div class="row">
+<div class="row fadedd">
     <div class="col-xs-offset-2 col-xs-8">
         <ul class="nav nav-pills nav-justified">
             <li id="imagePill" class="active"><a data-toggle="pill" href="#imageTab">IMAGE</a></li>
@@ -92,21 +125,18 @@
         </ul>
     </div>
 </div>
-<div>
-    <div class="col-xs-offset-2 col-xs-8 form-group">
-        <form method="post" action="Default/Save">
-            <div id="upload" class="row">
-                <div class="col-xs-offset-2 col-xs-8">
-                    <input name="file" id="file" type="file" aria-label="files" />
-                </div>
+
+<div class="form-group fadedd">
+    <div class="row">
+        <div class="dropZone col-xs-offset-2 col-xs-8">
+            <div class="textWrapper">
+                <p>將檔案拖曳至此</p>
             </div>
-            <div id="submit" class="row">
-                <div class="col-xs-12">
-                    <p>
-                        <button type="submit" class="k-button">送出 </button>
-                    </p>
-                </div>
-            </div>
-        </form>
+        </div>
+    </div>
+    <div id="upload" class="row">
+        <div class="col-xs-offset-3 col-xs-6">
+            <input name="files" id="files" type="file" aria-label="files" />
+        </div>
     </div>
 </div>

@@ -2,11 +2,37 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
 namespace Story.WebApplication.Controllers
 {
+    [DataContract]
+    public class ChunkMetaData
+    {
+        [DataMember(Name = "uploadUid")]
+        public string UploadUid { get; set; }
+        [DataMember(Name = "fileName")]
+        public string FileName { get; set; }
+        [DataMember(Name = "contentType")]
+        public string ContentType { get; set; }
+        [DataMember(Name = "chunkIndex")]
+        public long ChunkIndex { get; set; }
+        [DataMember(Name = "totalChunks")]
+        public long TotalChunks { get; set; }
+        [DataMember(Name = "totalFileSize")]
+        public long TotalFileSize { get; set; }
+    }
+
+    public class FileResult
+    {
+        public bool uploaded { get; set; }
+        public string fileUid { get; set; }
+    }
+
     public class DefaultController : Controller
     {
         // GET: Default
@@ -18,17 +44,36 @@ namespace Story.WebApplication.Controllers
 
         [HttpPost]
         //public ActionResult Save(HttpPostedFileBase file)
-        public ActionResult Save()
+        public ActionResult ChunkSave(IEnumerable<HttpPostedFileBase> files, string metaData)
         {
-            if (Request.Files["Attachment"] is HttpPostedFileBase file)
+            var ms = new MemoryStream(Encoding.UTF8.GetBytes(metaData));
+            var serializer = new DataContractJsonSerializer(typeof(ChunkMetaData));
+            ChunkMetaData somemetaData = serializer.ReadObject(ms) as ChunkMetaData;
+            string path = String.Empty;
+            if (files != null)
             {
-                var fileName = Path.GetFileName(file.FileName);
-                var physicalPath = Path.Combine(Server.MapPath("~/App_Data"), fileName);
-
-                file.SaveAs(physicalPath);
+                foreach (var file in files)
+                {
+                    //path = Path.Combine(Server.MapPath("~/App_Data"), somemetaData.FileName);
+                    //AppendToFile(path, file.InputStream);
+                }
             }
 
-            return Content(string.Empty);
+            FileResult fileBlob = new FileResult();
+            fileBlob.uploaded = somemetaData.TotalChunks - 1 <= somemetaData.ChunkIndex;
+            fileBlob.fileUid = somemetaData.UploadUid;
+
+            return Json(fileBlob);
+
+            //if (Request.Files["Attachment"] is HttpPostedFileBase file)
+            //{
+            //    var fileName = Path.GetFileName(file.FileName);
+            //    var physicalPath = Path.Combine(Server.MapPath("~/App_Data"), fileName);
+
+            //    file.SaveAs(physicalPath);
+            //}
+
+            //return Content(string.Empty);
         }
 
         // GET: Default/Details/5
